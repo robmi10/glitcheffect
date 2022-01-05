@@ -1,10 +1,12 @@
 import React, { useRef, Suspense, useState } from 'react'
 import { Canvas, useFrame, useLoader, extend } from '@react-three/fiber'
-import {OrbitControls, Icosahedron, useCubeTexture, useTexture, MeshDistortMaterial, Effects, MeshWobbleMaterial, Sphere } from "@react-three/drei"
+import {OrbitControls, Icosahedron, useCubeTexture, useTexture, MeshDistortMaterial, Effects, MeshWobbleMaterial, Html, Sphere } from "@react-three/drei"
 import "./styles.css"
 import * as THREE from "three";
 import { BloomPass } from "three/examples/jsm/postprocessing/BloomPass";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
+
+import TextScramble, { ScrambleTexts } from '@twistezo/react-text-scramble'
 
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import Colorimg from "../images/MetalPlates013_1K_Color.jpg"
@@ -21,6 +23,17 @@ import NibiruBlack  from "../images/Nibiru_Black.png"
 import NibiruRed  from "../images/Nibiru_Red.png"
 
 import Sphereimg from "../images/sphere.png"
+
+const header1 = [
+  'NIBIRU',
+  "NIBIrU"
+  ]
+
+const header2 = [
+  'SOFTWARE',
+  "sOFTwARE"
+  ]
+
 
 extend({ GlitchPass, BloomPass });
 
@@ -47,96 +60,19 @@ function Box(props) {
   )
 }
 
- const MainSphere = ({ material }) => {
-    const main = useRef();
-    // main sphere rotates following the mouse position
-    useFrame(({ clock, mouse }) => {
-      main.current.rotation.z = clock.getElapsedTime();
-      main.current.rotation.y = THREE.MathUtils.lerp(
-        main.current.rotation.y,
-        mouse.x * Math.PI,
-        0.1
-      );
-      main.current.rotation.x = THREE.MathUtils.lerp(
-        main.current.rotation.x,
-        mouse.y * Math.PI,
-        0.1
-      );
-    });
-    return (
-      <Icosahedron
-        args={[1, 4]}
-        ref={main}
-        material={material}
-        position={[1, 0, 0]}
-      />
-    );
-  }
-/* 
-    
-  const Scene = () => {
-    const colorMap = useLoader(TextureLoader, metalimg)
-    const texture = useTexture(metalimg)
-    // We use `useResource` to be able to delay rendering the spheres until the material is ready
-    const [material, set] = useState();
-    return (
-      <>
-        <mesh>
-        <MainSphere position={[1, 0, 0]} />
-        <meshStandardMaterial map={texture} 
-        />
-      </mesh>
-      </>
-    );
-  }  */
-
-
-/* 
-  function Instances({ material }) {
-    return (
-      <>
-        <MainSphere material={material} />
-      </>
-    );
-  }
-  
-  function Scene() {
-    const bumpMap = useTexture("../images/MetalPlates013_1K_Color.jpg");
-    const colorMap = useLoader(TextureLoader, Colorimg)
-    // We use `useResource` to be able to delay rendering the spheres until the material is ready
-    const [material, set] = useState();
-  
-    return (
-      <>
-        <MeshDistortMaterial
-          ref={set}
-          colorMap={colorMap}
-          color={"green"}
-          roughness={0.1}
-          metalness={1}
-          bumpScale={0.005}
-          clearcoat={1}
-          clearcoatRoughness={1}
-          radius={1}
-          distort={0.4}
-        />
-        {material && <Instances material={material} />}
-      </>
-    );
-  }  */
-
 const name = (type) => `../images/MetalPlates013_1K_AmbientOcclusion${type}.jpg`;
 const Scene = () => {
-const texture = useLoader(THREE.TextureLoader, Sphereimg)
+const texture = useLoader(THREE.TextureLoader, NibiruRed)
  
   return (
     <>
    
       <mesh>
       
-
-      <Sphere visible position={[0, 0, 0]} args={[1.5, 16, 200]}>
-      <MeshWobbleMaterial
+      <group position={[0,0,0]} rotation={[0,0,0]}>
+      <Sphere visible position={[0, 0, 0]} args={[1, 40, 40]}>
+      <meshStandardMaterial
+      map={texture}
           attach="material"
           color="#fff"
           factor={1} // Strength, 0 disables the effect (default=1)
@@ -144,11 +80,24 @@ const texture = useLoader(THREE.TextureLoader, Sphereimg)
           roughness={0.01}
           bumpScale={0.4}
           wireframe
-          wireframeLinecap = "butt"
-          wireframeLinejoin = "bever"
         />
 
+
+
+          <Html>
+            
+            <h1 style={{color: "#ffff", position:"absolute", left: -350}}>NIBIRU</h1>
+
+            <h1 style={{color: "#ffff", position:"absolute", left: 200}}>SOFTWARE</h1>
+            
+          </Html>
+
         </Sphere>
+
+   
+
+
+        </group>
       </mesh>
     </>
   );
@@ -168,22 +117,22 @@ export default function Glitch() {
     <div className="container">
     <Canvas>
     <Effects>
-    
         <glitchPass attachArray="passes" />
       </Effects>
       <ambientLight intensity={0.5} />
       <directionalLight intensity={0.05} />
       <pointLight intensity={0.2} color="red" />
 
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+      <spotLight position={[10, 10, 10]} angle={0.5} penumbra={1} />
  
     
     
       <Suspense fallback={null}>
-
+   
+        
         <Scene />
       </Suspense>
-      <OrbitControls maxPolarAngle={Math.PI / 2} minPolarAngle={0}/>§
+      <OrbitControls autoRotate autoRotateSpeed={10}/>§
       
     </Canvas>
 

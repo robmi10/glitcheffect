@@ -1,10 +1,10 @@
 import Glitch from "./Glitch/Glitch";
-
+import Ascii from "./Ascii";
 function App() {
   return (
     <>
-
-      <Glitch/>   
+    <h1> Trackball</h1>
+      <Ascii/>   
 
     </>
   );
