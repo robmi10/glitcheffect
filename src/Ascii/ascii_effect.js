@@ -38,7 +38,7 @@ var AsciiEffect = function ( renderer, charSet, options ) {
 		width = w;
 		height = h;
 
-		renderer.setSize( w, h );
+		renderer.setSize( 400, 400 );
 
 		initAsciiSize();
 
@@ -68,8 +68,8 @@ var AsciiEffect = function ( renderer, charSet, options ) {
 		iWidth = Math.round( width * fResolution );
 		iHeight = Math.round( height * fResolution );
 
-		oCanvas.width = iWidth;
-		oCanvas.height = iHeight;
+		//oCanvas.width = iWidth;
+		//oCanvas.height = iHeight;
 		// oCanvas.style.display = "none";
 		// oCanvas.style.width = iWidth;
 		// oCanvas.style.height = iHeight;
@@ -101,7 +101,6 @@ var AsciiEffect = function ( renderer, charSet, options ) {
 		oStyle.textDecoration = "none";
 
 	}
-
 
 	var aDefaultCharList = ( " .,:;i1tfLCG08@" ).split( "" );
 	var aDefaultColorCharList = ( " CGO08@" ).split( "" );

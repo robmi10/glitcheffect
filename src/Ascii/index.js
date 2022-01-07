@@ -1,14 +1,17 @@
-import React,{useEffect} from 'react'
+import React,{useEffect, useRef} from 'react'
 import { AsciiEffect } from './ascii_effect'
 import * as THREE from "three";
 import { TrackballControls } from 'three-stdlib';
 import sphere from "../images/sphere.png"
 import { PlainAnimator } from 'three-plain-animator/lib/plain-animator';
 import GifLoader from 'three-gif-loader';
+import "../index.css"
 
-const Ascii = () => {
+const Ascii = ({gif}) => {
+  const mountRef = useRef(null);
 
   useEffect(() => {
+    
     
     let camera, controls, scene, renderer, effect;
 
@@ -22,7 +25,7 @@ const Ascii = () => {
         function init() {
 
           camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-          camera.position.y = 150;
+          camera.position.y = 30;
           camera.position.z = 500;
 
           scene = new THREE.Scene();
@@ -41,12 +44,12 @@ const Ascii = () => {
             // load a image resource
             const texture = loading.load(
               // resource URL
-              'https://media0.giphy.com/media/vETeJc11yHAas/giphy.gif',);
+              gif,);
 
       
           const geometry = new THREE.PlaneGeometry(512, 512);
        
-          const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+          const material = new THREE.MeshBasicMaterial({ map: texture, transparent: false });
           let mesh = new THREE.Mesh(geometry, material)
           mesh.position.set(0, 0, 1);
 
@@ -55,20 +58,22 @@ const Ascii = () => {
        
 
           renderer = new THREE.WebGLRenderer();
-          renderer.setSize( window.innerWidth, window.innerHeight );
+          renderer.setSize(200, 1000 );
           renderer.domElement.style.color = 'green';
 
           effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
-          effect.setSize( window.innerWidth, window.innerHeight );
-          effect.domElement.style.color = 'green';
-          effect.domElement.style.backgroundColor = 'black';
+          effect.setSize( 1200, 500 );
+          effect.domElement.style.color = '#e57468';
+          effect.domElement.style.backgroundColor = 'transparent';
 
           // Special case: append effect.domElement, instead of renderer.domElement.
           // AsciiEffect creates a custom domElement (a div container) where the ASCII elements are placed.
 
-          document.body.appendChild( effect.domElement );
+          //document.body.appendChild( effect.domElement );
+          
+          mountRef.current.appendChild( effect.domElement );
 
-          controls = new TrackballControls( camera, effect.domElement );
+          controls = new TrackballControls( camera );
 
           //
 
@@ -108,10 +113,14 @@ const Ascii = () => {
           effect.render( scene, camera );
 
         }
-
+        return () => mountRef.current.removeChild( renderer.domElement);
   }, [])
   return (
     <>
+
+          <div ref={mountRef}>
+
+          </div>
 
     </>
   )
