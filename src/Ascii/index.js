@@ -2,6 +2,9 @@ import React,{useEffect} from 'react'
 import { AsciiEffect } from './ascii_effect'
 import * as THREE from "three";
 import { TrackballControls } from 'three-stdlib';
+import sphere from "../images/sphere.png"
+import { PlainAnimator } from 'three-plain-animator/lib/plain-animator';
+import GifLoader from 'three-gif-loader';
 
 const Ascii = () => {
 
@@ -33,11 +36,27 @@ const Ascii = () => {
           pointLight2.position.set( - 500, - 500, - 500 );
           scene.add( pointLight2 );
 
-          sphere = new THREE.Mesh( new THREE.SphereBufferGeometry( 1, 1 ), new THREE.MeshPhongMaterial( { flatShading: false } ) );
-          scene.add( sphere );
+          const loading = new GifLoader();
+            
+            // load a image resource
+            const texture = loading.load(
+              // resource URL
+              'https://media0.giphy.com/media/vETeJc11yHAas/giphy.gif',);
+
+      
+          const geometry = new THREE.PlaneGeometry(512, 512);
+       
+          const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+          let mesh = new THREE.Mesh(geometry, material)
+          mesh.position.set(0, 0, 1);
+
+          scene.add( mesh );
+
+       
 
           renderer = new THREE.WebGLRenderer();
           renderer.setSize( window.innerWidth, window.innerHeight );
+          renderer.domElement.style.color = 'green';
 
           effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
           effect.setSize( window.innerWidth, window.innerHeight );
@@ -81,9 +100,8 @@ const Ascii = () => {
 
           const timer = Date.now() - start;
 
-          sphere.position.y = Math.abs( Math.sin( timer * 0.002 ) ) * 150;
-          sphere.rotation.x = timer * 0.0003;
-          sphere.rotation.z = timer * 0.0002;
+         /*  sphere.rotation.x = timer * 0.0003;
+          sphere.rotation.z = timer * 0.0002; */
 
           controls.update();
 
