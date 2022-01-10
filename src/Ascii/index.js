@@ -1,4 +1,4 @@
-import React,{useEffect, useRef} from 'react'
+import React,{useEffect, useRef, useState} from 'react'
 import { AsciiEffect } from './ascii_effect'
 import * as THREE from "three";
 import { TrackballControls } from 'three-stdlib';
@@ -7,12 +7,14 @@ import { PlainAnimator } from 'three-plain-animator/lib/plain-animator';
 import GifLoader from 'three-gif-loader';
 import "../index.css"
 
-const Ascii = ({gif}) => {
+const Ascii = ({gif, color}) => {
+  const [color_, setColor] = useState("blue")
+  const controlcolor = useRef(null);
+
+  console.log("current color -->", color)
   const mountRef = useRef(null);
 
   useEffect(() => {
-    
-    
     let camera, controls, scene, renderer, effect;
 
     let sphere, plane;
@@ -51,7 +53,7 @@ const Ascii = ({gif}) => {
        
           const material = new THREE.MeshBasicMaterial({ map: texture, transparent: false });
           let mesh = new THREE.Mesh(geometry, material)
-          mesh.position.set(0, 0, 1);
+          mesh.position.set(0, 0, 2);
 
           scene.add( mesh );
 
@@ -60,28 +62,39 @@ const Ascii = ({gif}) => {
           renderer = new THREE.WebGLRenderer();
           renderer.setSize(200, 1000 );
           renderer.domElement.style.color = 'green';
+            
+              effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
+              effect.setSize( 1200, 500 );
 
-          effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
-          effect.setSize( 1200, 500 );
-          effect.domElement.style.color = '#e57468';
-          effect.domElement.style.backgroundColor = 'transparent';
 
+              var decreaseCubeSize = (color_now) => {
+                effect.domElement.style.color = color_now;
+              };
+              controls = new TrackballControls( camera );
+              
+              effect.domElement.style.backgroundColor = 'transparent';
+          
           // Special case: append effect.domElement, instead of renderer.domElement.
           // AsciiEffect creates a custom domElement (a div container) where the ASCII elements are placed.
-
           //document.body.appendChild( effect.domElement );
           
           mountRef.current.appendChild( effect.domElement );
-
-          controls = new TrackballControls( camera );
-
+            
+      
           //
 
-          window.addEventListener( 'resize', onWindowResize, false );
+         // window.addEventListener( 'resize', onWindowResize, true );
+
+
+          
+        
+
+
+        controlcolor.current = {decreaseCubeSize}
 
         }
 
-        function onWindowResize() {
+    /*     function onWindowResize() {
 
           camera.aspect = window.innerWidth / window.innerHeight;
           camera.updateProjectionMatrix();
@@ -89,7 +102,7 @@ const Ascii = ({gif}) => {
           renderer.setSize( window.innerWidth, window.innerHeight );
           effect.setSize( window.innerWidth, window.innerHeight );
 
-        }
+        } */
 
         //
 
@@ -104,23 +117,38 @@ const Ascii = ({gif}) => {
         function render() {
 
           const timer = Date.now() - start;
-
          /*  sphere.rotation.x = timer * 0.0003;
           sphere.rotation.z = timer * 0.0002; */
-
           controls.update();
-
           effect.render( scene, camera );
-
         }
+
+        
+
         return () => mountRef.current.removeChild( renderer.domElement);
   }, [])
   return (
     <>
 
+  
           <div ref={mountRef}>
 
           </div>
+
+          <div className="containerbutton">
+          <button onClick={() => (controlcolor.current.decreaseCubeSize("red"))}> set red</button>
+
+          <button onClick={() => (controlcolor.current.decreaseCubeSize("blue"))}> set blue</button>
+
+          <button onClick={() => (controlcolor.current.decreaseCubeSize("green"))}> set green</button>
+
+          <button onClick={() => (controlcolor.current.decreaseCubeSize("#e57468"))}> set Nibiru</button>
+
+          <button onClick={() => (controlcolor.current.decreaseCubeSize("black"))}> black</button>
+
+          <button onClick={() => (controlcolor.current.decreaseCubeSize("white"))}> black</button>
+        </div>
+        
 
     </>
   )

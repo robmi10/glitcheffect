@@ -66,9 +66,7 @@ const texture = useLoader(THREE.TextureLoader, NibiruRed)
  
   return (
     <>
-   
       <mesh>
-      
       <group position={[0,0,0]} rotation={[0,0,0]}>
       <Sphere visible position={[0, 0, 0]} args={[1, 40, 40]}>
       <meshStandardMaterial
@@ -81,22 +79,11 @@ const texture = useLoader(THREE.TextureLoader, NibiruRed)
           bumpScale={0.4}
           wireframe
         />
-
-
-
           <Html>
-            
             <h1 style={{color: "#ffff", position:"absolute", left: -350}}>NIBIRU</h1>
-
             <h1 style={{color: "#ffff", position:"absolute", left: 200}}>SOFTWARE</h1>
-            
           </Html>
-
         </Sphere>
-
-   
-
-
         </group>
       </mesh>
     </>
@@ -132,7 +119,7 @@ export default function Glitch() {
         
         <Scene />
       </Suspense>
-      <OrbitControls autoRotate autoRotateSpeed={10}/>§
+      <OrbitControls autoRotate autoRotateSpeed={10}/>
       
     </Canvas>
 
