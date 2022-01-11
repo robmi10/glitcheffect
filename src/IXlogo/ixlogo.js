@@ -1,25 +1,27 @@
 import React, { useRef, useState } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import {OrbitControls, Icosahedron, useCubeTexture, useTexture, MeshDistortMaterial, Effects, MeshWobbleMaterial, Html, Sphere } from "@react-three/drei"
-import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import * as THREE from "three";
 import ix_logo from "../images/IXT.svg"
-
+import layer1 from "../images/Side-A.png"
+import layer2 from "../images/Side-B.png"
+import layer3 from "../images/Side-C.png"
+import layer4 from "../images/Side-D.png"
+import { TextureLoader } from 'three/src/loaders/TextureLoader.js'
 function Box() {
     
-  const texture = useLoader(THREE.TextureLoader, ix_logo)
-  const texture1 = useLoader(THREE.TextureLoader, ix_logo)
-  const texture2 = useLoader(THREE.TextureLoader, ix_logo)
-  const texture3 = useLoader(THREE.TextureLoader, ix_logo)
-  const texture4 = useLoader(THREE.TextureLoader, ix_logo)
-  const texture5 = useLoader(THREE.TextureLoader, ix_logo)
+  const texture = useLoader(TextureLoader, layer1)
+  const texture1 = useLoader(TextureLoader, layer2)
+  const texture2 = useLoader(TextureLoader, layer3)
+  const texture3 = useLoader(TextureLoader, layer4)
+  const texture4 = useLoader(TextureLoader, ix_logo)
+  const texture5 = useLoader(TextureLoader, ix_logo)
 
-  const mesh = useRef()
   useFrame(() => {
    
   })
   return (
-    <mesh ref={mesh}>
+    <mesh >
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial map={texture} attachArray="material"/>
       <meshStandardMaterial map={texture1} attachArray="material"/>
