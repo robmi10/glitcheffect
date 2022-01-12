@@ -48,7 +48,7 @@ function App() {
         <Ascii gif ={"https://media2.giphy.com/media/BAngO0KVd8bCaDgdas/giphy.gif"} color = {color}/>  
       </div>
  */}
-
+ 
   <IXtoken/>
     </>
   );

@@ -1,34 +1,47 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import {OrbitControls, Icosahedron, useCubeTexture, useTexture, MeshDistortMaterial, Effects, MeshWobbleMaterial, Html, Sphere } from "@react-three/drei"
 import * as THREE from "three";
 import ix_logo from "../images/IXT.svg"
-import layer1 from "../images/Side-A.png"
-import layer2 from "../images/Side-B.png"
-import layer3 from "../images/Side-C.png"
-import layer4 from "../images/Side-D.png"
-import { TextureLoader } from 'three/src/loaders/TextureLoader.js'
-function Box() {
-    
-  const texture = useLoader(TextureLoader, layer1)
-  const texture1 = useLoader(TextureLoader, layer2)
-  const texture2 = useLoader(TextureLoader, layer3)
-  const texture3 = useLoader(TextureLoader, layer4)
-  const texture4 = useLoader(TextureLoader, ix_logo)
-  const texture5 = useLoader(TextureLoader, ix_logo)
+import layer1 from "../images/down_blk.png"
+import layer2 from "../images/right_blk.png"
+import layer3 from "../images/left_blk.png"
+import layer4 from "../images/up_blk.png"
 
+import layer_black_A from "../images/Side-B-blk.png"
+import layer_black_B from "../images/Side-A blk.png"
+import { TextureLoader } from 'three/src/loaders/TextureLoader.js'
+import "../Glitch/styles.css"
+import { PointLight } from 'three';
+
+function Box() {
+ /*  const down = useLoader(TextureLoader, layer1)
+  const right = useLoader(TextureLoader, layer2)
+  const left = useLoader(TextureLoader, layer3)
+  const up = useLoader(TextureLoader, layer4)
+ */
+  const [down, right, left, up] = useLoader(TextureLoader, [layer1, layer2, layer3, layer4]);
+
+  const mesh = useRef()
   useFrame(() => {
-   
+    mesh.current.rotation.x = mesh.current.rotation.y += 0.00
   })
+
   return (
-    <mesh >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial map={texture} attachArray="material"/>
-      <meshStandardMaterial map={texture1} attachArray="material"/>
-      <meshStandardMaterial map={texture2} attachArray="material"/>
-      <meshStandardMaterial map={texture3} attachArray="material"/>
-      <meshStandardMaterial map={texture4} attachArray="material"/>
-      <meshStandardMaterial map={texture5} attachArray="material"/>
+    <mesh ref={mesh}>
+      <boxBufferGeometry attach="geometry" args={[1, 1, 1]}/>
+
+      <meshBasicMaterial attachArray="material" map={left} />
+      <meshBasicMaterial attachArray="material" map={right} />
+      <meshBasicMaterial attachArray="material" map={left} />
+      <meshBasicMaterial attachArray="material" map={down}/>
+     
+      <meshBasicMaterial attachArray="material" map={up} />
+      <meshBasicMaterial attachArray="material" map={up}/>
+     
+      
+      
+
       
     </mesh>
   )
@@ -36,16 +49,14 @@ function Box() {
 
 export default function IXtoken() {
   return (
-    <div className="container">
+    <div className ="container">
     <Canvas>
-      <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[-10, -10, -10]} />
-      
-      <OrbitControls autoRotate autoRotateSpeed={10}/>
-      <Box />
+   
+      <OrbitControls rotation autoRotateSpeed={8}/>
+      <Suspense fallback={null}>
+        <Box />
+      </Suspense>
     </Canvas>
     </div>
   )
 }
-
